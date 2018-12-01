@@ -32,4 +32,7 @@ codegen/
 # Octave session info
 octave-workspace
 
+# token
+**/token.mat
+
 # End of https://www.gitignore.io/api/matlab
