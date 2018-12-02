@@ -62,22 +62,51 @@ Theta2_grad = zeros(size(Theta2));
 %               and Theta2_grad from Part 2.
 %
 
+% cost function
+
+h = sigmoid([ones(m, 1) sigmoid([ones(m, 1) X] * Theta1')] * Theta2');
+h = h';
+
+for i = 1:m
+    new_y = (1:num_labels == y(i));
+    J = J + (-new_y*log(h(:, i)) - (1 - new_y)*log(1 - h(:, i)));
+end
+
+J = J / m;
+
+% 带正则化的cost function
+% 取非bias unit的theta
+rTheta1 = Theta1(:, 2:end);
+rTheta2 = Theta2(:, 2:end);
+J = J + lambda / (2 * m) * (rTheta1(:)' * rTheta1(:) + rTheta2(:)' * rTheta2(:));
 
 
+% gradient funtion
 
+Delta_2 = 0;
+Delta_1 = 0;
+for t = 1:m
+% step1
+    a_1 = [1; X(t, :)'];
+    z_2 = Theta1 * a_1;
+    a_2 = [1; sigmoid(z_2)];
+    z_3 = Theta2 * a_2;
+    a_3 = sigmoid(z_3);
+% step2
+    delta_3 = a_3 - (1:num_labels == y(t))';
+% step3
+    delta_2 = Theta2' * delta_3 .* [1; sigmoidGradient(z_2)];
+% step4
+    Delta_2 = Delta_2 + delta_3 * a_2';
+    Delta_1 = Delta_1 + delta_2(2:end) * a_1';
+end
+% step5
+Theta1_grad = Delta_1 / m;
+Theta2_grad = Delta_2 / m;
 
-
-
-
-
-
-
-
-
-
-
-
-
+% 带正则化的梯度 bias unit要排除
+Theta1_grad(:, 2:end) = Theta1_grad(:, 2:end) + lambda / m * Theta1(:, 2:end);
+Theta2_grad(:, 2:end) = Theta2_grad(:, 2:end) + lambda / m * Theta2(:, 2:end);
 
 
 % -------------------------------------------------------------
