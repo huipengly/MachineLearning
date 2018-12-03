@@ -53,13 +53,27 @@ error_val   = zeros(m, 1);
 
 % ---------------------- Sample Solution ----------------------
 
+% for n = 1:m
+%     theta = trainLinearReg(X(1:n, :), y(1:n), lambda);
+%     error_train(n) = linearRegCostFunction(X(1:n, :), y(1:n), theta, 0);
+%     error_val(n) = linearRegCostFunction(Xval, yval, theta, 0);
+% end
 
 
+% ---------------------- randomly select examples -----------------
+repeat_time = 10;
 
-
-
-
-% -------------------------------------------------------------
+for n = 1:m
+    for t = 1:repeat_time
+        train_rand_index = randperm(m, n);              % 随机n个训练集
+        val_rand_index = randperm(size(Xval, 1), n);    % 随机n个测试集
+        theta = trainLinearReg(X(train_rand_index, :), y(train_rand_index), lambda);
+        error_train(n) = error_train(n) + linearRegCostFunction(X(train_rand_index, :), y(train_rand_index), theta, 0);
+        error_val(n) = error_val(n) + linearRegCostFunction(Xval(val_rand_index, :), yval(val_rand_index, :), theta, 0);
+    end
+    error_train(n) = error_train(n) / repeat_time;
+    error_val(n) = error_val(n) / repeat_time;
+end
 
 % =========================================================================
 

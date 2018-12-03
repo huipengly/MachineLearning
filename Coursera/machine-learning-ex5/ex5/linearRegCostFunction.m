@@ -19,11 +19,12 @@ grad = zeros(size(theta));
 %               You should set J to the cost and grad to the gradient.
 %
 
+% 注意正则化时，没有theta0
+
+J = 1 / (2*m) * ((X * theta) - y)' * ((X * theta) - y) + lambda / (2*m) * (theta(2:end)' * theta(2:end));
 
 
-
-
-
+grad = 1 / m * X' * ((X * theta) - y) + lambda / m * theta .* [0; ones(length(theta) - 1, 1)];
 
 
 
