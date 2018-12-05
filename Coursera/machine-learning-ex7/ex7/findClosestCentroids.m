@@ -21,10 +21,12 @@ idx = zeros(size(X,1), 1);
 % Note: You can use a for-loop over the examples to compute this.
 %
 
+M = size(X, 1);
 
-
-
-
+for m = 1:M
+    x_temp = repmat(X(m, :), K, 1);                         % 扩展为K个相同的
+    [~, idx(m)] = min(sum((x_temp - centroids) .^ 2, 2));   % 计算并找到最小距离索引
+end
 
 
 % =============================================================
