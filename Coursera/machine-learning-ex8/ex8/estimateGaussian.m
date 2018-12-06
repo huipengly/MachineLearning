@@ -22,9 +22,11 @@ sigma2 = zeros(n, 1);
 %
 
 
+mu = 1 / m * sum(X)';
 
+err = X - repmat(mu', m, 1);
 
-
+sigma2 = (1 / m * sum(err.^2))';    % 这里用err' * err是错的
 
 
 
